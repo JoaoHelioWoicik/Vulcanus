@@ -2,11 +2,18 @@ const express = require('express');
 const socket = require('socket.io')
 const http = require('http')
 const path = require('path')
+const mysql = require('mysql2');
 
 const app = express();
 const httpServer = http.createServer(app);
 
 const port = 80;
+
+const connection = mysql.createConnection({
+    user: 'root',
+    password: '12345678',
+    database: 'vulcanus'
+});
 
 const io = new socket.Server(httpServer, {
     cors: {
@@ -33,6 +40,12 @@ app.use((err, _, res) => {
 io.on('connection', (socket) => {
     console.log(`Client connected: ${socket.id}`);
 
+    socket.on('register', (data) => {
+        // lalala i skip server side validation because im lazy
+
+        
+    })
+
     socket.on('request-data', (token) => {
         console.log(token)
         socket.emit('recieve-data', { token: token });
@@ -41,6 +54,14 @@ io.on('connection', (socket) => {
     socket.on('disconnect', (reason) => {
         console.log(`Client disconnected: ${socket.id}, reason: ${reason}`);
     });
+});
+
+connection.connect((err) => {
+    if (err) {
+        console.error('Connection error:', err);
+        return;
+    }
+    console.log('Connected to MySQL');
 });
 
 httpServer.listen(port, () => {
