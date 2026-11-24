@@ -40,7 +40,7 @@ function getClasse() {
         text_prompt += "\nInsira o numero da sua classe"
 
         class_id = window.prompt(text_prompt);
-        if (nome.length < 1) {
+        if (class_id.length < 1) {
             window.alert("Classe é obrigatoria.")
             continue
         }
@@ -97,11 +97,11 @@ function startDataLoop() {
 }
 
 function init() {
-    startDataLoop()
-
-    if (document.cookie = '') {
+    if (document.cookie == '') {
         register()
     }
+
+    startDataLoop()
 }
 
 init()
